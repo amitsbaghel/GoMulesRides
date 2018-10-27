@@ -7,4 +7,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'goMulesRides';
+  loggedIn=true
+
+
+  gotoDashboard(value){
+    console.log("emitted to parent : " +value)
+    this.loggedIn=value
+  }
+
 }

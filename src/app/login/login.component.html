@@ -1,0 +1,73 @@
+<div class="text-center">
+  <!-- login form -->
+
+  <ngb-alert *ngIf="signedUp" type="success" (close)="signedUp = null">User signed up succefully. Login please!</ngb-alert>
+
+
+  <form *ngIf="loginshow" [formGroup]="loginForm" (ngSubmit)="login()" class="form-signin">
+
+    <img class="mb-4" src="assets/UCM_logo.png" alt="" width="100" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+
+
+    <!-- email -->
+    <label for="inputEmail" class="sr-only">Email address</label>
+    <input type="email" formControlName="email" class="form-control" placeholder="Email address" required>
+    <div *ngIf="email.invalid && email.touched">
+        <div class="invalid-feedback d-block"  *ngIf="email.errors.required">Email is required.</div>
+      </div>
+    <!-- password -->
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" formControlName="password" required class="form-control" placeholder="Password">
+    <div *ngIf="password.invalid && password.touched" >
+        <div class="invalid-feedback d-block" *ngIf="password.errors.required">Password is required.</div>
+      </div>
+    <button class="btn btn-lg btn-primary btn-block" [disabled]="loginForm.invalid" type="submit">Sign in</button>
+    <button type="button" class="btn btn-link" (click)="loginshow=false">Sign Up</button>
+
+    <p>
+      Login Form Status: {{ loginForm.status }}
+    </p>
+
+  </form>
+
+  <!-- signup form -->
+  <form *ngIf="!loginshow" [formGroup]="signupForm" (ngSubmit)="signup()" class="form-signin">
+    <img class="mb-4" src="assets/UCM_logo.png" alt="" width="100" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">Please sign Up</h1>
+
+    <!-- validation -->
+    <div *ngIf="signupNameVal.invalid && signupNameVal.touched" class="alert alert-danger">
+      <div *ngIf="signupNameVal.errors.required">Name is required.</div>
+    </div>
+    <div *ngIf="signupemailVal.invalid && signupemailVal.touched" class="alert alert-danger">
+      <div *ngIf="signupemailVal.errors.required">Email is required.</div>
+    </div>
+    <div *ngIf="signuppasswordVal.invalid && signuppasswordVal.touched" class="alert alert-danger">
+      <div *ngIf="signuppasswordVal.errors.required">Password is required.</div>
+    </div>
+
+    <!-- signup name -->
+    <label for="signupName" class="sr-only">Name</label>
+    <input type="text" formControlName="signupName" class="form-control" placeholder="Name" required>
+
+    <!-- signup email -->
+    <label for="signupEmail" class="sr-only">Email address</label>
+    <input type="email" formControlName="signupEmail" class="form-control" placeholder="Email address" required>
+
+    <!-- signup password -->
+    <label for="signupPassword" class="sr-only">Password</label>
+    <input type="password" formControlName="signupPassword" class="form-control" placeholder="Password" required>
+
+    <!-- confirm password -->
+    <label for="signupconfirmPassword" class="sr-only">Confirm Password</label>
+    <input type="password" formControlName="signupconfirmPassword" class="form-control" placeholder="confirm Password"
+      required>
+
+    <button class="btn btn-lg btn-primary btn-block" [disabled]="signupForm.invalid" type="submit">Sign Up</button>
+    <button type="button" class="btn btn-link" (click)="loginshow=true">Sign In</button>
+    <p>
+      Sign Up Form Status: {{ signupForm.status }}
+    </p>
+  </form>
+</div>

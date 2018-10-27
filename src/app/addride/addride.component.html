@@ -1,0 +1,89 @@
+<main role="main" class="container w-75"> 
+  <!-- mt-2  -->
+  <div class="jumbotron">
+    
+  
+
+  <div>
+      <!-- class="py-5 text-center" -->
+       <ngb-alert *ngIf="rideSaved" type="success" (close)="rideSaved = null">Ride saved succefully!</ngb-alert>
+
+    <h2>Add a ride</h2>
+  </div>
+
+  <div class="row mx-auto">
+
+    <div class="col-md-12 order-md-1">
+        <!-- [formGroup]="rideForm"  (ngSubmit)="saveRide()"-->
+
+      <form name="rideForm"  (ngSubmit)="f.form.valid && saveRide()" #f="ngForm" class="needs-validation">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="fromCity">From</label>
+            <input type="text" [(ngModel)]="ride.from"   #fromCityauto name="fromCity" class="form-control" placeholder="" value=""
+              required>
+
+            <div *ngIf="ride.from.invalid && email.touched" class="invalid-feedback d-block">
+              Valid place name is required.
+            </div>
+          </div>
+
+          <!-- to city name -->
+          <div class="col-md-6 mb-3">
+            <label for="toCity">To</label>
+            <!-- formControlName="toCity" -->
+            <input type="text" [(ngModel)]="ride.to"  #toCityauto class="form-control" name="toCity" placeholder="" value="" required>
+            <div class="invalid-feedback d-block">
+              Valid To is required.
+            </div>
+          </div>
+        </div>
+
+
+        <!-- journey date -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="journeyDate">Journey Date</label>
+            <div class="input-group">
+                <!-- formControlName="journeyDate" -->
+              <input [(ngModel)]="ride.date"  #journeyDate class="form-control"   placeholder="mm/dd/yyyy" name="dp" [displayMonths]="displayMonths"
+                [navigation]="navigation" [outsideDays]="outsideDays" [showWeekNumbers]="showWeekNumbers" name="journeyDate"
+                ngbDatepicker #d="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+              </div>
+            </div>
+            <div class="invalid-feedback d-block">
+              Date is required.
+            </div>
+          </div>
+
+          <!-- time -->
+          <div class="col-md-6 mb-3">
+            <label for="journeyTime">Journey Time</label>
+            <!-- formControlName="journeyTime" -->
+            <ngb-timepicker required [(ngModel)]="ride.time"  [(ngModel)]="firstName"  name="journeyTime" [meridian]="true"></ngb-timepicker>
+            <!-- https://ng-bootstrap.github.io/#/components/timepicker/examples -->
+            
+            Selected time: {{ride.time | json}}
+            <div class="invalid-feedback d-block">
+              Date is required.
+            </div>
+          </div>
+
+          <!-- seat -->
+          <div class="col-md-3 mb-3">
+            <label for="seat">Seats</label>
+            <!-- formControlName="seat" -->
+            <input type="number" [(ngModel)]="ride.seat"  min="1" max="5" class="form-control" name="seat" id="seat" placeholder="" required>
+            <div class="invalid-feedback d-block">
+              Seat is required.
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-lg" type="submit">Save</button>
+      </form>
+    </div>
+  </div>
+</div>
+</main>
