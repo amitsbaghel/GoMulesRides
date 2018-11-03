@@ -21,12 +21,10 @@ export class LoginComponent implements OnInit {
 
   // login
   login(): void {
-debugger
     this.userService.login(this.loginForm.value)
       .subscribe((data) => {
         this.user=data
-        console.log('user ',this.user)
-        localStorage.setItem('currentUser', JSON.stringify(this.user._id));
+        localStorage.setItem('currentUser', this.user._id);
         this.router.navigate(["/dashboard"]);
       },
         err => {
@@ -39,8 +37,6 @@ debugger
   signup(): void {
     this.userService.signUp(this.signupForm.value)
     .subscribe(userdata => {
-
-      console.log('userdata',userdata)
       if(userdata){
       this.signedUp=true
       this.loginshow=true
@@ -64,8 +60,7 @@ debugger
       signupPassword: ['', { updateOn: 'blur' }, Validators.required],
       signupconfirmPassword: ['', { updateOn: 'blur' }, Validators.required]
     });
-    // https://stackblitz.com/angular/bxvldvkjeav?file=src%2Fapp%2Freactive%2Fhero-form-reactive.component.ts
-
+    
     this.loginForm = this.fb.group({
       email: ['', { updateOn: 'blur' }, Validators.required],
       password: ['', { updateOn: 'blur' }, Validators.required]

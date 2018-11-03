@@ -1,15 +1,14 @@
 <main role="main" class="container w-75"> 
   <!-- mt-2  -->
   <div class="jumbotron">
-    
-  
-
-  <div>
+      <div class="card">
+          <div class="card-header">
+            Add A Ride
+          </div>
+          <div class="card-body">
       <!-- class="py-5 text-center" -->
        <ngb-alert *ngIf="rideSaved" type="success" (close)="rideSaved = null">Ride saved succefully!</ngb-alert>
 
-    <h2>Add a ride</h2>
-  </div>
 
   <div class="row mx-auto">
 
@@ -80,10 +79,22 @@
               Seat is required.
             </div>
           </div>
+
+           <!-- seat -->
+           <div class="col-md-3 mb-3">
+            <label for="seat">Per person Charge in $</label>
+            <!-- formControlName="seat" -->
+            <input type="text" [(ngModel)]="ride.charge"  class="form-control" name="seat" id="seat" placeholder="" required>
+            <div class="invalid-feedback d-block">
+              Charge is required.
+            </div>
+          </div>
         </div>
         <button class="btn btn-primary btn-lg" type="submit">Save</button>
       </form>
     </div>
   </div>
+  </div>
+</div>
 </div>
 </main>

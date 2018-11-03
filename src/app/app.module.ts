@@ -25,7 +25,6 @@ import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
     RidesComponent,
     WalletComponent,
     MessageComponent
-
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Ride } from '../_models/ride.model'
+import { Ride, RideDetails } from '../_models/ride.model'
 import { catchError, tap } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { of } from 'rxjs'; // convert some data to observables
@@ -11,13 +11,16 @@ import { of } from 'rxjs'; // convert some data to observables
 export class RideService {
   private dataUrl: string = 'http://localhost:3000/ride' // Node js server path
   constructor(private http: HttpClient) { }
-  // getride(userdata: any): Observable<Ride> {
-  //   return this.http.post<Ride>(this.dataUrl, { }).pipe(
-  //   tap(data=>console.log('data from service',data)),
-    
-  //     catchError(this.handleError('ride',userdata)));
-  // }
 
+
+  // get all rides
+  getrides(userdata: any): Observable<RideDetails[]> {
+    return this.http.get<RideDetails[]>(this.dataUrl, {}).pipe(
+      catchError(this.handleError('ride',userdata)));
+  }
+
+
+  // save a ride
   saveride(ridedata: any): Observable<Ride> {
 
     let ride={
@@ -26,10 +29,9 @@ export class RideService {
       date:ridedata.date,
       time:ridedata.time,
       seat:ridedata.seat,
+      charge:ridedata.charge,
       id:localStorage.getItem('currentUser') //create a service instead
     }
-
-    console.log('data in servce',ride)
 
     return this.http.post<Ride>(this.dataUrl,ride)
       .pipe(tap(data=>console.log('data from ride save',data)),
