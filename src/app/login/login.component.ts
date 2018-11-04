@@ -3,6 +3,7 @@ import { UserService } from '../_services/user.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { User } from '../_models/user.model'
+import { fieldmatchValidator } from '../shared/field-match.directive';
 
 @Component({
   selector: 'app-login',
@@ -55,15 +56,15 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     // updateOn default is change other option is blur or submit
     this.signupForm = this.fb.group({
-      signupName: ['', { updateOn: 'blur' }, Validators.required],
-      signupEmail: ['', { updateOn: 'blur' }, Validators.required],
-      signupPassword: ['', { updateOn: 'blur' }, Validators.required],
-      signupconfirmPassword: ['', { updateOn: 'blur' }, Validators.required]
+      signupName: ['', Validators.required],
+      signupEmail: ['',[Validators.required,Validators.email]],
+      signupPassword: ['', [Validators.required,Validators.minLength(3)]],
+      signupconfirmPassword: ['',[Validators.required,fieldmatchValidator('signupPassword')]]
     });
-    
+
     this.loginForm = this.fb.group({
-      email: ['', { updateOn: 'blur' }, Validators.required],
-      password: ['', { updateOn: 'blur' }, Validators.required]
+      email: ['', [Validators.email,Validators.email]],
+      password: ['', Validators.required]
     });
   }
 
