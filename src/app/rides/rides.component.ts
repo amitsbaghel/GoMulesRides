@@ -3,7 +3,6 @@ import { RideService } from '../_services/ride.service';
 import { RideDetails } from '../_models/ride.model';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ScriptService } from '../shared/script.service';
-
 @Component({
   selector: 'app-rides',
   templateUrl: './rides.component.html',
@@ -12,6 +11,8 @@ import { ScriptService } from '../shared/script.service';
 export class RidesComponent implements OnInit,AfterViewInit {
   ridesDetails: RideDetails[]
   closeResult: string
+  modalSeat:string
+  modalCharge:string
   @ViewChild('fromcity') fromCityauto: ElementRef;
   @ViewChild('tocity') toCityauto: ElementRef;
   @ViewChild('distance') distanceEle: ElementRef;
@@ -57,7 +58,7 @@ export class RidesComponent implements OnInit,AfterViewInit {
       if (status !== google.maps.DistanceMatrixStatus.OK || status != "OK"){
         console.log('Error:', status);
         // OR
-        alert(status);
+        //alert(status);
       }else{
          document.getElementById('distance').value=responseDis.rows[0].elements[0].distance.text
          document.getElementById('duration').value=responseDis.rows[0].elements[0].duration.text
@@ -69,11 +70,19 @@ export class RidesComponent implements OnInit,AfterViewInit {
   // modal pop up open starts
   open(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = 'Closed with: ${result}';
+      // this.closeResult = 'Closed with: ${result}';
+      
+      console.log('save button')
+
+      
+
     }, (reason) => {
+
+      console.log('close ')
       this.closeResult = 'Dismissed ${this.getDismissReason(reason)}';
+      
     });
-  } //// modal pop up open ends
+  } // modal pop up open ends
 
   // getDismissReason starts
   private getDismissReason(reason: any): string {

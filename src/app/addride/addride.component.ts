@@ -71,7 +71,7 @@ export class AddrideComponent implements OnInit, AfterViewInit {
 
   // ngAfterViewInit starts
   ngAfterViewInit() {
-
+ 
     this.scriptloader.load('googlemaps').then(data => {
 
       var fromcityAuto = new google.maps.places.Autocomplete(this.fromCityauto.nativeElement);

@@ -38,7 +38,7 @@
                 
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
-                        <button type="button" (click)="open(content)" class="btn btn-link nav-link active">Book</button>
+                        <button type="button" (click)="modalSeat=ride.seat;modalCharge=ride.charge;seatselected=1;open(content)" class="btn btn-link nav-link active">Book</button>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link active" href="#">Communicate</a>
@@ -63,21 +63,21 @@
             <div class="form-row">
             <div class="form-group col">
               <label for="wallet">Wallet</label>
-              <input class="form-control" name="wallet" type="text" placeholder="wallet" readonly>
+              <input class="form-control" name="wallet" type="text" placeholder="50" readonly>
               </div>
               <div class="form-group col">
                   <label for="seatsAvailable">Seats Available</label>
-                  <input class="form-control" name="seatsAvailable" type="text" placeholder="seats Available" readonly>
+                  <input class="form-control" value={{modalSeat}} name="seatsAvailable" type="text" placeholder="seats Available" readonly>
                   </div>
                 </div>
                 <div class="form-row">
                 <div class="form-group col">
-                    <label for="seatselect">Select</label>
-                    <input class="form-control" name="seatselect" type="text" placeholder="Select Seats">
+                    <label for="seatselect">Select Seat</label>
+                    <input class="form-control" [(ngModel)]="seatselected" name="seatselect" type="text" placeholder="Select Seats">
               </div>
               <div class="form-group col">
-                  <label for="totalcharge">Select</label>
-                  <input class="form-control" name="totalcharge" type="text" placeholder="Calculated charges">
+                  <label for="totalcharge">Charges per person {{modalCharge}} </label>
+                  <input class="form-control" value={{seatselected*modalCharge}} name="totalcharge" type="text" placeholder="Calculated charges">
             </div>
             </div>
           </form>
