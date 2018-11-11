@@ -33,7 +33,7 @@
   </form>
 
   <!-- signup form -->
-  <form *ngIf="!loginshow" [formGroup]="signupForm" (ngSubmit)="signup()" class="form-signin">
+  <form *ngIf="!loginshow" [formGroup]="signupForm" (ngSubmit)="signup()" class="form-signup">
     <img class="mb-4" src="assets/UCM_logo.png" alt="" width="100" height="72">
     <h1 class="h3 mb-3 font-weight-normal">Please sign Up</h1>
 
@@ -56,17 +56,24 @@
     <div *ngIf="signuppasswordVal.invalid && (signuppasswordVal.dirty || signuppasswordVal.touched)">
       <div class="invalid-feedback d-block" *ngIf="signuppasswordVal.errors.required">Password is required.</div>
       <div class="invalid-feedback d-block" *ngIf="signuppasswordVal.errors.minlength">Password should be at least 3 chars.</div>
-      <!-- <div class="invalid-feedback d-block" *ngIf="signupconfirmPasswordVal.value!=signuppasswordVal.value">Password and Confirm Password should be same.</div> -->
     </div>
     <!-- confirm password -->
 
-    {{signupconfirmPasswordVal.mismatched}}
     <label for="signupconfirmPassword" class="sr-only">Confirm Password</label>
     <input type="password" formControlName="signupconfirmPassword" class="form-control" placeholder="confirm Password"
       required>
       <div *ngIf="signupconfirmPasswordVal.invalid && (signupconfirmPasswordVal.dirty || signupconfirmPasswordVal.touched)">
         <div class="invalid-feedback d-block" *ngIf="signupconfirmPasswordVal.errors.required">Confirm Password is required.</div>
         <div class="invalid-feedback d-block" *ngIf="signupconfirmPasswordVal.errors.mismatched">Password should be same as Password.</div>
+      </div>
+
+          <!-- wallet -->
+
+    <label for="signupwallet" class="sr-only">Confirm Password</label>
+    <input type="text" name="signupwallet" formControlName="signupWallet" class="form-control" placeholder="Some Amount"
+      required>
+      <div *ngIf="signupWalletVal.invalid && (signupWalletVal.dirty || signupWalletVal.touched)">
+        <div class="invalid-feedback d-block" *ngIf="signupWalletVal.errors.required">Enter an amount for wallet.</div>
       </div>
     <button class="btn btn-lg btn-primary btn-block" [disabled]="signupForm.invalid" type="submit">Sign Up</button>
     <button type="button" class="btn btn-link" (click)="loginshow=true">Sign In</button>

@@ -1,58 +1,50 @@
-<main role="main" class="container w-75"> 
-  <!-- mt-2  -->
+<main role="main" class="container w-75">
   <div class="jumbotron">
       <div class="card">
           <div class="card-header">
             Add A Ride
           </div>
           <div class="card-body">
-      <!-- class="py-5 text-center" -->
        <ngb-alert *ngIf="rideSaved" type="success" (close)="rideSaved = null">Ride saved succefully!</ngb-alert>
-
-
   <div class="row mx-auto">
 
     <div class="col-md-12 order-md-1">
-        <!-- [formGroup]="rideForm"  (ngSubmit)="saveRide()"-->
 
       <form name="rideForm"  (ngSubmit)="f.form.valid && saveRide()" #f="ngForm" class="needs-validation">
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="fromCity">From</label>
-            <input type="text" [(ngModel)]="ride.from"   #fromCityauto name="fromCity" class="form-control" placeholder="" value=""
+            <input type="text" [(ngModel)]="ride.from" #ridefrom="ngModel"   #fromCityauto name="fromCity" class="form-control" placeholder="" value=""
               required>
 
-            <div *ngIf="ride.from.invalid && email.touched" class="invalid-feedback d-block">
-              Valid place name is required.
+            <div *ngIf="ridefrom.invalid && (ridefrom.touched || ridefrom.dirty)" class="invalid-feedback d-block">
+              Valid place from name is required.
             </div>
           </div>
 
           <!-- to city name -->
           <div class="col-md-6 mb-3">
             <label for="toCity">To</label>
-            <!-- formControlName="toCity" -->
-            <input type="text" [(ngModel)]="ride.to"  #toCityauto class="form-control" name="toCity" placeholder="" value="" required>
-            <div class="invalid-feedback d-block">
+            <input type="text" [(ngModel)]="ride.to" #rideto="ngModel"  #toCityauto class="form-control" name="toCity" placeholder="" value="" required>
+            <div *ngIf="rideto.invalid && (rideto.touched || rideto.dirty)" class="invalid-feedback d-block">
               Valid To is required.
             </div>
           </div>
         </div>
 
-
         <!-- journey date -->
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="journeyDate">Journey Date</label>
-            <div class="input-group">
-                <!-- formControlName="journeyDate" -->
-              <input [(ngModel)]="ride.date"  #journeyDate class="form-control"   placeholder="mm/dd/yyyy" name="dp" [displayMonths]="displayMonths"
-                [navigation]="navigation" [outsideDays]="outsideDays" [showWeekNumbers]="showWeekNumbers" name="journeyDate"
+            <div class="input-group custom-margin-top">
+              <input [(ngModel)]="ride.date" readonly #ridedate="ngModel" required  #journeyDate class="form-control"   placeholder="mm/dd/yyyy" name="dp" [displayMonths]="displayMonths"
+                [navigation]="navigation" [markDisabled]="priorDatesDisabled" [outsideDays]="outsideDays" [showWeekNumbers]="showWeekNumbers" name="journeyDate"
                 ngbDatepicker #d="ngbDatepicker">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
               </div>
             </div>
-            <div class="invalid-feedback d-block">
+            <div *ngIf="ridedate.invalid && (ridedate.touched || ridedate.dirty)" class="invalid-feedback d-block">
               Date is required.
             </div>
           </div>
@@ -60,37 +52,35 @@
           <!-- time -->
           <div class="col-md-6 mb-3">
             <label for="journeyTime">Journey Time</label>
-            <!-- formControlName="journeyTime" -->
-            <ngb-timepicker required [(ngModel)]="ride.time"  [(ngModel)]="firstName"  name="journeyTime" [meridian]="true"></ngb-timepicker>
-            <!-- https://ng-bootstrap.github.io/#/components/timepicker/examples -->
-            
-            Selected time: {{ride.time | json}}
-            <div class="invalid-feedback d-block">
-              Date is required.
+            <ngb-timepicker timebefore [(ngModel)]="ride.time" #ridetime="ngModel" required name="journeyTime" [meridian]="true"></ngb-timepicker>
+           
+            <div *ngIf="ridetime.invalid && (ridetime.touched || ridetime.dirty)">
+              <div class="invalid-feedback d-block" *ngIf="ridetime.errors.required">Time is required.</div>
+              <div class="invalid-feedback d-block" *ngIf="ridetime.errors.timebefore">Time is before the current time.</div>
             </div>
           </div>
+        </div>
 
+        <div class="row">
           <!-- seat -->
-          <div class="col-md-3 mb-3">
+          <div class="col-md-6 mb-3">
             <label for="seat">Seats</label>
-            <!-- formControlName="seat" -->
-            <input type="number" [(ngModel)]="ride.seat"  min="1" max="5" class="form-control" name="seat" id="seat" placeholder="" required>
-            <div class="invalid-feedback d-block">
+            <input type="text" (keypress)="isInteger($event)" [(ngModel)]="ride.seat" #rideseat="ngModel"  min="1" max="5" class="form-control" name="seat" id="seat" required>
+            <div *ngIf="rideseat.invalid && (rideseat.touched || rideseat.dirty)" class="invalid-feedback d-block">
               Seat is required.
             </div>
           </div>
 
-           <!-- seat -->
-           <div class="col-md-3 mb-3">
+           <!-- charge -->
+           <div class="col-md-6 mb-3">
             <label for="seat">Per person Charge in $</label>
-            <!-- formControlName="seat" -->
-            <input type="text" [(ngModel)]="ride.charge"  class="form-control" name="seat" id="seat" placeholder="" required>
-            <div class="invalid-feedback d-block">
+            <input type="text" (keypress)="isInteger($event)" [(ngModel)]="ride.charge" #ridecharge="ngModel"  class="form-control" name="seat" id="seat" placeholder="" required>
+            <div *ngIf="ridecharge.invalid && (ridecharge.touched || ridecharge.dirty)" class="invalid-feedback d-block">
               Charge is required.
             </div>
           </div>
         </div>
-        <button class="btn btn-primary btn-lg" type="submit">Save</button>
+        <button class="btn btn-primary btn-lg" [disabled]="!f.form.valid" type="submit">Save</button>
       </form>
     </div>
   </div>

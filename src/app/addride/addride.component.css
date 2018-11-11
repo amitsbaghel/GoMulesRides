@@ -1,9 +1,3 @@
-/* input[type=date]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    display: none;
+.custom-margin-top {
+    margin-top: 37px;
 }
-
-input[type="date"]::-webkit-calendar-picker-indicator{
-    -webkit-appearance: none;
-    display: none;
-} */

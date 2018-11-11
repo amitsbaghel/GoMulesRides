@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Ride, RideDetails } from '../_models/ride.model'
+import { Ride,RidePosting } from '../_models/ride.model'
 import { catchError, tap } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { of } from 'rxjs'; // convert some data to observables
@@ -12,29 +12,45 @@ export class RideService {
   private dataUrl: string = 'http://localhost:3000/ride' // Node js server path
   constructor(private http: HttpClient) { }
 
-
   // get all rides
-  getrides(userdata: any): Observable<RideDetails[]> {
-    return this.http.get<RideDetails[]>(this.dataUrl, {}).pipe(
-      catchError(this.handleError('ride',userdata)));
+  getrides(userdata: any): Observable<RidePosting[]> {
+    return this.http.get<RidePosting[]>(this.dataUrl, {}).pipe(
+      catchError(this.handleError('ride', userdata)));
   }
 
+  // get  rides from a user
+  getridesbyuser(userid: any): Observable<RidePosting[]> {
+    return this.http.get<RidePosting[]>(this.dataUrl + "/" + userid, {}).pipe(
+      catchError(this.handleError('ride', {} as RidePosting[])));
+  }
+
+  // update ride status
+  updateStatusRide(userid: any,rideid:string): Observable<RidePosting[]> {
+    return this.http.get<RidePosting[]>(this.dataUrl + "/" + rideid+"/"+userid, {}).pipe(
+      catchError(this.handleError('ride', {} as RidePosting[])));
+  }
+  
+  // update ride status
+  canceltheRide(userid: any,rideid:string): Observable<RidePosting[]> {
+      return this.http.get<RidePosting[]>(this.dataUrl + "/cancel/" + rideid+"/"+userid, {}).pipe(
+        catchError(this.handleError('ride', {} as RidePosting[])));
+    }
 
   // save a ride
   saveride(ridedata: any): Observable<Ride> {
 
-    let ride={
-      from:ridedata.from,
-      to:ridedata.to,
-      date:ridedata.date,
-      time:ridedata.time,
-      seat:ridedata.seat,
-      charge:ridedata.charge,
-      id:localStorage.getItem('currentUser') //create a service instead
+    let ride = {
+      from: ridedata.from,
+      to: ridedata.to,
+      date: ridedata.date,
+      time: ridedata.time,
+      seat: ridedata.seat,
+      charge: ridedata.charge,
+      id: localStorage.getItem('currentUser') //create a service instead
     }
 
-    return this.http.post<Ride>(this.dataUrl,ride)
-      .pipe(tap(data=>console.log('data from ride save',data)),
+    return this.http.post<Ride>(this.dataUrl, ride)
+      .pipe(tap(data => console.log('data from ride save', data)),
         catchError(this.handleError('ride', {} as Ride)));
   }
 
@@ -48,7 +64,7 @@ export class RideService {
     return (error: any): Observable<T> => {
 
       // TODO: send the error to remote logging infrastructure
-      console.error('handleError catched this error ',error); // log to console instead
+      console.error('handleError catched this error ', error); // log to console instead
 
       // TODO: better job of transforming error for user consumption
       // this.log(`${operation} failed: ${error.message}`);

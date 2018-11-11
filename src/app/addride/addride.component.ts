@@ -4,7 +4,7 @@ import { ScriptService } from '../shared/script.service'
 import { RideService } from '../_services/ride.service';
 import { Ride } from '../_models/ride.model';
 import { NgbTimeStringAdapter } from '../shared/timepicker-adapter';
-import { NgbTimeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTimeAdapter, NgbDateAdapter, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDateAmericanFormatAdapter } from '../shared/datepicker-adapter';
 
 @Component({
@@ -19,32 +19,28 @@ export class AddrideComponent implements OnInit, AfterViewInit {
   @ViewChild('fromCityauto') fromCityauto: ElementRef;
   @ViewChild('toCityauto') toCityauto: ElementRef;
   rideSaved: boolean = false
+  priorDatesDisabled:any
+  todaydate:Date
+  ride:Ride
 
-  ride: Ride = {
-    date: new Date().toLocaleDateString("en-US"),
-    from: "",
-    to: "",
-    seat: 1,
-    time: "13:01:00",
-    charge: "0"
-  }
-
-  constructor(private scriptloader: ScriptService, private rideService: RideService) { }
+  constructor(private scriptloader: ScriptService, private rideService: RideService) {
+    this.todaydate=new Date();
+    this.todaydate.setHours(this.todaydate.getHours() + 2);
+    this.ride = {
+      date: new Date().toLocaleDateString("en-US"),
+      from: "",
+      to: "",
+      seat: 0,
+      time: this.todaydate.getHours()+":01:00",
+      charge: ""
+    }
+   }
 
   saveRide(): void {
 
-    //validation
-
-    // @HostBinding('class.is-open')
-    // isOpen = false;
-
-    // toggle() {
-    //   this.isOpen = !this.isOpen;
-    // }
-
     this.ride.from = this.fromCityauto.nativeElement.value;
     this.ride.to = this.toCityauto.nativeElement.value;
-
+    this.ride.time=  this.ride.time
     this.rideService.saveride(this.ride)
       .subscribe(ridedata => {
 
@@ -56,9 +52,9 @@ export class AddrideComponent implements OnInit, AfterViewInit {
             date: new Date().toLocaleDateString("en-US"),
             from: "",
             to: "",
-            seat: 1,
-            time: "01:00:00",
-            charge: "0"
+            seat: 0,
+            time: this.todaydate.getHours()+":01:00",
+            charge: ""
           }
         }
         //here to code for save show.
@@ -81,7 +77,6 @@ export class AddrideComponent implements OnInit, AfterViewInit {
       fromcityAuto.setComponentRestrictions(
         { 'country': ['us'] });
 
-
       fromcityAuto.setTypes(['(cities)'])
 
       var tocityAuto = new google.maps.places.Autocomplete(this.toCityauto.nativeElement);
@@ -95,5 +90,17 @@ export class AddrideComponent implements OnInit, AfterViewInit {
 
   // ngOnInit starts
   ngOnInit() {
+
+    // validation for disablnig dates before the today's date.
+    this.priorDatesDisabled=(date: NgbDate, current: {month: number}) => date.before(new NgbDate(new Date().getFullYear(),new Date().getMonth()+1,new Date().getDate()));
+
   } // ngOnInit ends
+
+  // validation for integer value only
+  isInteger(event){
+    if(isNaN(event.key)){
+      return false    
+    }
+    return true
+  }
 }

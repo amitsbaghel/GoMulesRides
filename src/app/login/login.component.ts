@@ -59,6 +59,7 @@ export class LoginComponent implements OnInit {
       signupName: ['', Validators.required],
       signupEmail: ['',[Validators.required,Validators.email]],
       signupPassword: ['', [Validators.required,Validators.minLength(3)]],
+      signupWallet: ['', [Validators.required]],
       signupconfirmPassword: ['',[Validators.required,fieldmatchValidator('signupPassword')]]
     });
 
@@ -73,6 +74,7 @@ export class LoginComponent implements OnInit {
   get password() { return this.loginForm.get('password'); }
 
   // signup :: validation check
+  get signupWalletVal() { return this.signupForm.get('signupWallet'); }
   get signupNameVal() { return this.signupForm.get('signupName'); }
   get signupemailVal() { return this.signupForm.get('signupEmail'); }
   get signuppasswordVal() { return this.signupForm.get('signupPassword'); }

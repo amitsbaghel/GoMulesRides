@@ -6,14 +6,20 @@ import { AddrideComponent } from './addride/addride.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { RidesComponent } from './rides/rides.component';
+import { WalletComponent } from './wallet/wallet.component';
+import { MybookingComponent } from './mybooking/mybooking.component';
+import { MyridepostingComponent } from './myrideposting/myrideposting.component';
 
 
 // https://codecraft.tv/courses/angular/routing/nested-routes/
 const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent,  children: [
-    
     {path: 'addride', component: AddrideComponent},
-    {path: 'rides', component: RidesComponent} 
+    {path: 'rides', component: RidesComponent},
+    {path: '', component: RidesComponent},
+    {path:'wallet',component: WalletComponent},
+    {path:'mybookings',component: MybookingComponent},
+    {path:'myrideposting',component: MyridepostingComponent}
   ],canActivate: [AuthGuard] },
   { path: '', component: LoginComponent },
   { path: '**', component: PageNotFoundComponent }

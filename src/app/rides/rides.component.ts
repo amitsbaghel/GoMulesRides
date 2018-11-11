@@ -1,74 +1,121 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { RideService } from '../_services/ride.service';
-import { RideDetails } from '../_models/ride.model';
+import { RidePosting } from '../_models/ride.model';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ScriptService } from '../shared/script.service';
 import { BookingService } from '../_services/booking.service';
-import {Booking} from '../_models/booking.model'
+import { Booking } from '../_models/booking.model'
+import { UserService } from '../_services/user.service';
+import { SumPipe } from '../shared/sum.pipe';
 @Component({
   selector: 'app-rides',
   templateUrl: './rides.component.html',
   styleUrls: ['./rides.component.css']
 })
-export class RidesComponent implements OnInit,AfterViewInit {
-  ridesDetails: RideDetails[]
+export class RidesComponent implements OnInit, AfterViewInit {
+  ridesDetails: RidePosting[]
   closeResult: string
-  totalSeat:string // total seats available
-  chargeperSeat:string // charge per seat
-  seatselected:string // total seats selected
-  rideID:string //which is shown in modal popup
-  componentRef:this=this
+  totalSeat: string // total seats available
+  chargeperSeat: string // charge per seat
+  seatselected: string // total seats selected
+  remainingseats:number // remaining seats
+  rideID: string //which is shown in modal popup
+  wallet: string = ""
+  booked: boolean = false
+
   @ViewChild('fromcity') fromCityauto: ElementRef;
   @ViewChild('tocity') toCityauto: ElementRef;
   @ViewChild('distance') distanceEle: ElementRef;
   @ViewChild('duration') durationEle: ElementRef;
 
   // constructor starts
-  constructor(private rideService: RideService,private scriptloader: ScriptService, private modalService: NgbModal,private bookingService: BookingService) {
-  
-   } //constructor ends
+  constructor(private rideService: RideService, private scriptloader: ScriptService, private modalService: NgbModal, private userService: UserService, private bookingService: BookingService,private sumPipe:SumPipe) {
 
-   //ngOnInit starts
+  } //constructor ends
+
+  //ngOnInit starts
   ngOnInit() {
 
     // getting all rides and fill
     this.rideService.getrides({})
       .subscribe(ridedata => {
         if (ridedata) {
-          
-          // no need to add this . add this at the time of insert.
-          ridedata.map(data => {  data.time = '1900-01-01T' + data.time });
           this.ridesDetails = ridedata
         }
       }, err => {
         console.log('Something went wrong!');
       }
       );  //saveRide ends
+
+    // get user data
   } //ngOnInit ends
 
+  // get user data on the basis of user ID
+  getUserData() {
+    // getUserData starts
+    this.userService.getUserData(localStorage.getItem('currentUser'))
+      .subscribe(userData => {
+        if (userData) {
+          this.wallet=userData.wallet;
+        }
+      }, err => {
+        console.log('Something went wrong!');
+      }
+      );  //getUserData ends
+  }
+
   //search starts
-  search(fromCity:string,toCity:string,){
-  
+  search(fromCity: string, toCity: string, ) {
+
     var service = new google.maps.DistanceMatrixService();
     service.getDistanceMatrix(
       {
         origins: [fromCity],
-        destinations: [toCity],            
+        destinations: [toCity],
         unitSystem: google.maps.UnitSystem.IMPERIAL,
         durationInTraffic: true,
         avoidHighways: false,
-        travelMode:google.maps.TravelMode.DRIVING,
+        travelMode: google.maps.TravelMode.DRIVING,
         avoidTolls: false
-      },response_data.bind(this)); // WOW learning moment
+      }, response_data.bind(this)); // WOW learning moment
 
-      function response_data(responseDis, status) {
-      if (status !== google.maps.DistanceMatrixStatus.OK || status != "OK"){
+    function response_data(responseDis, status) {
+      if (status !== google.maps.DistanceMatrixStatus.OK || status != "OK") {
         console.log('Error:', status);
-      }else{
-         this.distanceEle.nativeElement.value=responseDis.rows[0].elements[0].distance.text
-         this.durationEle.value=responseDis.rows[0].elements[0].duration.text
+      } else {
+        this.distanceEle.nativeElement.value = responseDis.rows[0].elements[0].distance.text
+        this.durationEle.nativeElement.value = responseDis.rows[0].elements[0].duration.text
       }
-    }}//search ends
+    }
+  }//search ends
+
+  // booking starts
+  bookRide() {
+    // save booking data
+    let bookingData: Booking = {
+      seat: this.seatselected,
+      charge: parseInt(this.seatselected) * parseInt(this.chargeperSeat) + "",
+      rideID: this.rideID,
+      userID: localStorage.getItem('currentUser')
+    }
+
+    this.bookingService.bookRide(bookingData)
+      .subscribe(bookingData => {
+        if (bookingData) {
+          this.booked = true
+          this.ridesDetails = bookingData
+          let openRide =this.ridesDetails.find(function(element) {
+            return element._id._id == this.rideID;
+          }.bind(this));
+          this.remainingseats=openRide._id.overallseats-openRide.totalbookingseats
+          this.getUserData()
+          this.seatselected=null
+        }
+      }, err => {
+        console.log('Something went wrong!');
+      }
+      );
+  } //booking save ends
 
   // modal pop up open starts
   open(content) {
@@ -76,34 +123,11 @@ export class RidesComponent implements OnInit,AfterViewInit {
       // this.closeResult = 'Closed with: ${result}';
       console.log('save button')
 
-      // save booking data
-
-
-
-      let bookingData:Booking={
-        seat: this.totalSeat,
-        charge: parseInt(this.totalSeat)*parseInt(this.chargeperSeat)+"",
-        rideID:this.rideID,
-        userID: localStorage.getItem('currentUser')
-      }
-
-      console.log('booking',bookingData)
-
-    this.bookingService.bookRide(bookingData)
-    .subscribe(bookingData => {
-      if (bookingData) { 
-        
-      }
-    }, err => {
-      console.log('Something went wrong!');
-    }
-    ); //booking save ends
- 
     }, (reason) => {
 
       console.log('close ')
       this.closeResult = 'Dismissed ${this.getDismissReason(reason)}';
-      
+
     });
   } // modal pop up open ends
 
@@ -121,7 +145,7 @@ export class RidesComponent implements OnInit,AfterViewInit {
   // ngAfterViewInit starts
   ngAfterViewInit() {
 
-    this.scriptloader.load('googlemaps','googledistance').then(data => {
+    this.scriptloader.load('googlemaps', 'googledistance').then(data => {
 
       var fromcityAuto = new google.maps.places.Autocomplete(this.fromCityauto.nativeElement);
       // Set the data fields to return when the user selects a place.

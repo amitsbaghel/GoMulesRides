@@ -3,7 +3,8 @@ import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs'; // convert some data to observables
-import { Booking } from '../_models/booking.model';
+import { Booking, BookingDetails } from '../_models/booking.model';
+import { RidePosting } from '../_models/ride.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class BookingService {
 
 
   // book a ride
-  bookRide(bookingData: Booking): Observable<Booking> {
+  bookRide(bookingData: Booking): Observable<RidePosting[]> {
 
     let booking={
       seat:bookingData.seat,
@@ -23,11 +24,18 @@ export class BookingService {
       rideID:bookingData.rideID
     }
 
-    console.log('booking in service before save',booking)
-
-    return this.http.post<Booking>(this.dataUrl,booking)
+    return this.http.post<RidePosting[]>(this.dataUrl,booking)
       .pipe(tap(data=>console.log('data from booking service',data)),
-        catchError(this.handleError('ride', {} as Booking)));
+        catchError(this.handleError('ride', {} as RidePosting[])));
+  }
+
+
+   // book a ride
+   getrides(userid: string): Observable<BookingDetails[]> {
+
+    return this.http.get<BookingDetails[]>(this.dataUrl+"/"+userid,{})
+      .pipe(tap(data=>console.log('data from get bookings',data)),
+        catchError(this.handleError('ride', {} as BookingDetails[])));
   }
 
   /**

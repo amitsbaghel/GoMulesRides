@@ -1,3 +1,51 @@
-<p>
-  wallet works!
-</p>
+<main role="main" class="container w-75">
+  <!-- mt-2  -->
+  <div class="jumbotron">
+    <div class="card">
+      <div class="card-header">
+        Add money
+      </div>
+      <div class="card-body">
+        <!-- class="py-5 text-center" -->
+        <ngb-alert *ngIf="rideSaved" type="success" (close)="rideSaved = null">Ride saved succefully!</ngb-alert>
+
+
+        <div class="row mx-auto">
+
+          <div class="col-md-12 order-md-1">
+
+            <form [formGroup]="walletForm" (ngSubmit)="updateWallet()" class="needs-validation">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="">Current Amount</label>
+                  <input type="text" name="amount" class="form-control" placeholder="Amount" value="{{currentAmount}}"
+                    readonly>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="fromCity">Amount</label>
+                  <input type="text" formControlName="amount" name="amount" class="form-control" placeholder="Amount"
+                    value="" required>
+
+                  <div *ngIf="amount.invalid && (amount.dirty || amount.touched)" class="invalid-feedback d-block">
+                    Amount is required.
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                </div>
+              </div>
+
+              <button class="btn btn-primary btn-lg" [disabled]="walletForm.invalid" type="submit">Update wallet</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

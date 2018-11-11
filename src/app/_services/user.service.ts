@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../_models/user.model'
 import { catchError, tap } from 'rxjs/operators'
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { of } from 'rxjs'; // convert some data to observables
 
 @Injectable({
@@ -15,16 +15,34 @@ export class UserService {
   login(userdata: any): Observable<User> {
     // https://stackblitz.com/angular/ggooaknoppr?file=src%2Fapp%2Fheroes%2Fheroes.component.ts
     return this.http.post<User>(this.dataUrl + "/login", { email: userdata.email, password: userdata.password }).pipe(
-    tap(data=>console.log('data from service',data)),
     
-      catchError(this.handleError('user login',userdata)));
+    catchError(this.handleError('user login',userdata)));
   }
 
   signUp(userdata: any): Observable<User> {
 
-    return this.http.post<User>(this.dataUrl, { name: userdata.signupEmail, email: userdata.signupEmail, password: userdata.signupPassword })
+    return this.http.post<User>(this.dataUrl, { name: userdata.signupName, email: userdata.signupEmail, password: userdata.signupPassword,wallet:userdata.signupWallet })
       .pipe(
         catchError(this.handleError('user login', {} as User)));
+  }
+
+  // update wallet 
+  updateWallet(walletamount: any,user:string): Observable<any> {
+
+    return this.http.post<any>(this.dataUrl+"/wallet", { wallet: walletamount,userid:user })
+      .pipe(
+        catchError(this.handleError('wallet update', {} as any)));
+  }
+
+  // to fetch user data on the basis of userid
+  getUserData(userId: string): Observable<User> {
+
+  //   const options = userId ?
+  //  { params: new HttpParams().set('userid', userId) } : {};
+
+    return this.http.get<User>(this.dataUrl+"/"+userId)
+      .pipe(
+        catchError(this.handleError('user data fetched', {} as User)));
   }
 
 

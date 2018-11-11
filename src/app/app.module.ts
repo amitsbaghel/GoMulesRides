@@ -14,6 +14,11 @@ import {ReactiveFormsModule,FormsModule} from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgbDateCustomParserFormatter} from './shared/dateFormat'
 import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { GreaterThanValidatorDirective } from './shared/greater-than.directive';
+import { SumPipe } from './shared/sum.pipe';
+import { MybookingComponent } from './mybooking/mybooking.component';
+import { MyridepostingComponent } from './myrideposting/myrideposting.component';
+import { TimeBeforeValidatorDirective } from './shared/time-before.directive';
 
 @NgModule({
   declarations: [
@@ -24,7 +29,12 @@ import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
     PageNotFoundComponent,
     RidesComponent,
     WalletComponent,
-    MessageComponent
+    MessageComponent,
+    GreaterThanValidatorDirective,
+    TimeBeforeValidatorDirective,
+    SumPipe,
+    MybookingComponent,
+    MyridepostingComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +44,7 @@ import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
     FormsModule,
     NgbModule
   ],
-  providers: [ {provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter}],
+  providers: [ {provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter},SumPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
