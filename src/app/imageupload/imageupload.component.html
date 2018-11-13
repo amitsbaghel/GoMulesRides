@@ -1,0 +1,23 @@
+<form [formGroup]="uploadForm" clas="w-25"  enctype="multipart/form-data" (ngSubmit)="upload()" >
+  <div class="form-group">
+  <!-- item name -->
+  <label for="itemname" class="">Item Name</label>
+  <input type="text" formControlName="itemname" class="form-control" placeholder="item name" required>
+  <div *ngIf="itemname.invalid && (itemname.dirty || itemname.touched)">
+      <div class="invalid-feedback d-block"  *ngIf="itemname.errors.required">item name is required.</div>
+    </div>
+    </div>
+  <!-- upload files -->
+  <div class="form-group">
+  <label for="uploadfile" class="sr-only">Upload file</label>
+  <input type="file" multiple formControlName="uploadfile" value=""  (change)="onFileChange($event)" />
+  <div *ngIf="uploadfile.invalid && (uploadfile.dirty || uploadfile.touched)" >
+      <div class="invalid-feedback d-block" *ngIf="uploadfile.errors.required">choose files.</div>
+    </div>
+  </div>
+  <button class="btn btn-lg btn-primary btn-block" [disabled]="uploadForm.invalid" type="submit">Upload File</button>
+
+  <p>
+    Login Form Status: {{ uploadForm.status }}
+  </p>
+</form>

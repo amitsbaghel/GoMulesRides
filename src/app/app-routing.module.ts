@@ -9,6 +9,7 @@ import { RidesComponent } from './rides/rides.component';
 import { WalletComponent } from './wallet/wallet.component';
 import { MybookingComponent } from './mybooking/mybooking.component';
 import { MyridepostingComponent } from './myrideposting/myrideposting.component';
+import { ImageuploadComponent } from './imageupload/imageupload.component';
 
 
 // https://codecraft.tv/courses/angular/routing/nested-routes/
@@ -22,7 +23,8 @@ const routes: Routes = [
     {path:'myrideposting',component: MyridepostingComponent}
   ],canActivate: [AuthGuard] },
   { path: '', component: LoginComponent },
-  { path: '**', component: PageNotFoundComponent }
+  { path: '**', component: PageNotFoundComponent },
+  { path: 'upload', component: ImageuploadComponent }
 ];
 
 @NgModule({

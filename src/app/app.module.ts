@@ -19,6 +19,7 @@ import { SumPipe } from './shared/sum.pipe';
 import { MybookingComponent } from './mybooking/mybooking.component';
 import { MyridepostingComponent } from './myrideposting/myrideposting.component';
 import { TimeBeforeValidatorDirective } from './shared/time-before.directive';
+import { ImageuploadComponent } from './imageupload/imageupload.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { TimeBeforeValidatorDirective } from './shared/time-before.directive';
     TimeBeforeValidatorDirective,
     SumPipe,
     MybookingComponent,
-    MyridepostingComponent
+    MyridepostingComponent,
+    ImageuploadComponent
   ],
   imports: [
     BrowserModule,
