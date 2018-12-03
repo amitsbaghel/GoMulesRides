@@ -22,6 +22,10 @@ export class NgbDateAmericanFormatAdapter extends NgbDateAdapter<string> {
     };
 
     toModel(date: NgbDateStruct): string {
-        return date.month+"/"+date.day+"/"+date.year
+        return `${this.pad(date.month)}`+"/"+`${this.pad(date.day)}`+"/"+date.year
     }
+
+  private pad(i: number): string {
+    return i < 10 ? `0${i}` : `${i}`;
+  }
 }

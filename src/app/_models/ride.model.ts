@@ -10,17 +10,11 @@ export interface Ride {
     status?: string;
 }
 
-// export interface RideDetails {
-//     from?: string;
-//     to?: string;
-//     date?: string;
-//     time?: string;
-//     seat?: number;
-//     cost?: string;
-//     _id?: string;
-//     details: string;
-//     userId?: User;
-// }
+interface bookingUserDetails{
+     comment:string,
+     rating:string,
+     name:string
+}
 
 export interface RidePosting {
     _id:{
@@ -36,5 +30,7 @@ export interface RidePosting {
         name: string
     }
     totalbookingseats: number,
-    totalbookingcharge: number
+    totalbookingcharge: number,
+    rating:number,
+    bookingUserDetails:bookingUserDetails[]
 }

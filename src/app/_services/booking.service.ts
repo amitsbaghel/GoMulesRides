@@ -34,8 +34,30 @@ export class BookingService {
    getrides(userid: string): Observable<BookingDetails[]> {
 
     return this.http.get<BookingDetails[]>(this.dataUrl+"/"+userid,{})
-      .pipe(tap(data=>console.log('data from get bookings',data)),
+      .pipe(
         catchError(this.handleError('ride', {} as BookingDetails[])));
+  }
+
+  // update ride rating
+  updateRating(userid:string,bookingID: string,rating:number,comment:string): Observable<BookingDetails[]> {
+
+    return this.http.get<BookingDetails[]>(this.dataUrl+"/"+userid+"/"+bookingID+"/"+rating+"/"+comment,{})
+      .pipe(
+        catchError(this.handleError('ride', {} as BookingDetails[])));
+  }
+
+  
+    // cancel ride by ride booking user
+    cancelBooking(userid:string,bookingID: string): Observable<BookingDetails[]> {
+      return this.http.get<BookingDetails[]>(this.dataUrl+"/cancel/"+userid+"/"+bookingID,{})
+        .pipe(
+          catchError(this.handleError('ride', {} as BookingDetails[])));
+    }
+
+   //get bookings by ride Id
+   getbookingsbyRideId(rideid: any): Observable<BookingDetails[]> {
+    return this.http.get<BookingDetails[]>(this.dataUrl + "/ride/" + rideid, {}).pipe(
+      catchError(this.handleError('booking', {} as BookingDetails[])));
   }
 
   /**

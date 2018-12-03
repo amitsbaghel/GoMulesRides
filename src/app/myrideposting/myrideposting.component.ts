@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { RideService } from '../_services/ride.service';
 import { Ride, RidePosting } from '../_models/ride.model';
+import { BookingDetails } from '../_models/booking.model';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { BookingService } from '../_services/booking.service';
 
 @Component({
   selector: 'app-myrideposting',
@@ -9,13 +12,14 @@ import { Ride, RidePosting } from '../_models/ride.model';
 })
 export class MyridepostingComponent implements OnInit {
   myridepostings:RidePosting[]
-  constructor(private rideService:RideService) { }
+  ridebookingdetails: BookingDetails[]
+  constructor(private rideService:RideService,private bookingService:BookingService,private modalService: NgbModal) { }
 
   ngOnInit() {
     this.rideService.getridesbyuser(localStorage.getItem('currentUser'))
     .subscribe(rideData => {
+      console.log('ridedata',rideData)
       if (rideData) {
-        // rideData.map(data => { data.time = '1900-01-01T' + data.time });
         this.myridepostings=rideData
       }
     }, err => {
@@ -24,14 +28,38 @@ export class MyridepostingComponent implements OnInit {
     );
   } //ngOnInt ends
 
-  //completetheride starts
-  completetheride(rideid:string)
+  getBookingsByRideId(rideId:number){
+    this.bookingService.getbookingsbyRideId(rideId)
+    .subscribe(ridebookingdetails => {
+      if (ridebookingdetails) {
+        this.ridebookingdetails=ridebookingdetails
+      }
+    }, err => {
+      console.log('Something went wrong!');
+    }
+    );
+  }
+
+  // modal pop up open starts
+  open(content) {
+    this.modalService.open(content, { size:'lg', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+    }, (reason) => {
+
+    });
+  } // modal pop up open ends
+
+  //complete the ride starts
+  completetheride(rideid:string,date:string,time:string)
   {
+    // var datetoCheck=this.combineDateTime(date,time);
+    // if(datetoCheck>=new Date())
+    // console.log(true);
+    // else
+    // console.log(false);
+
     this.rideService.updateStatusRide(localStorage.getItem('currentUser'),rideid)
     .subscribe(rideData => {
       if (rideData) {
-        debugger;
-        console.log(rideData)
         this.myridepostings=rideData
       }
     }, err => {
@@ -40,19 +68,35 @@ export class MyridepostingComponent implements OnInit {
     );
   } //completetheride ends
 
+  combineDateTime(date:string,time:string)
+  {
+    var newDate=new Date(date);
+    var newTime=new Date(time);
+    var year=newDate.getFullYear();
+    var month=newDate.getMonth()+1;
+    var day=newDate.getDate();
+    var hour=newTime.getHours();
+    var minute=newTime.getMinutes();
+    var combinedDate=new Date(year+"-"+this.pad(month)+"-"+this.pad(day)+"T"+this.pad(hour)+":"+this.pad(minute))
+    return combinedDate;
+  }
+
+  pad(value)
+  {
+    return value<10?'0'+value:value;
+  }
   
+  // cancel ride starts.
   canceltheride(rideid:string)
   {
     this.rideService.canceltheRide(localStorage.getItem('currentUser'),rideid)
     .subscribe(rideData => {
       if (rideData) {
-        debugger;
-        console.log(rideData)
         this.myridepostings=rideData
       }
     }, err => {
       console.log('Something went wrong!');
     }
     );
-  }
+  } // cancel ride ends
 }

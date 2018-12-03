@@ -4,6 +4,7 @@ import { User } from '../_models/user.model'
 import { catchError, tap } from 'rxjs/operators'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { of } from 'rxjs'; // convert some data to observables
+import { Res } from '../_models/response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,18 +13,17 @@ export class UserService {
   private dataUrl: string = 'http://localhost:3000/user' // Node js server path
   constructor(private http: HttpClient) { }
 
-  login(userdata: any): Observable<User> {
-    // https://stackblitz.com/angular/ggooaknoppr?file=src%2Fapp%2Fheroes%2Fheroes.component.ts
-    return this.http.post<User>(this.dataUrl + "/login", { email: userdata.email, password: userdata.password }).pipe(
+  login(userdata: any): Observable<Res> {
+    return this.http.post<Res>(this.dataUrl + "/login", { email: userdata.email, password: userdata.password }).pipe(
     
     catchError(this.handleError('user login',userdata)));
   }
 
-  signUp(userdata: any): Observable<User> {
+  signUp(userdata: any): Observable<Res> {
 
-    return this.http.post<User>(this.dataUrl, { name: userdata.signupName, email: userdata.signupEmail, password: userdata.signupPassword,wallet:userdata.signupWallet })
+    return this.http.post<Res>(this.dataUrl, { name: userdata.signupName, email: userdata.signupEmail, password: userdata.signupPassword,wallet:userdata.signupWallet,mobileNumber:userdata.signupMobile })
       .pipe(
-        catchError(this.handleError('user login', {} as User)));
+        catchError(this.handleError('user login', {} as Res)));
   }
 
   // update wallet 

@@ -51,8 +51,8 @@
 
           <!-- time -->
           <div class="col-md-6 mb-3">
-            <label for="journeyTime">Journey Time</label>
-            <ngb-timepicker timebefore [(ngModel)]="ride.time" #ridetime="ngModel" required name="journeyTime" [meridian]="true"></ngb-timepicker>
+            <label for="journeyTime">Journey Time</label> <!--timebefore plz add this to validate the time-->
+            <ngb-timepicker timebefore="journeyDate"  [(ngModel)]="ride.time" #ridetime="ngModel" required name="journeyTime" [meridian]="true"></ngb-timepicker>
            
             <div *ngIf="ridetime.invalid && (ridetime.touched || ridetime.dirty)">
               <div class="invalid-feedback d-block" *ngIf="ridetime.errors.required">Time is required.</div>

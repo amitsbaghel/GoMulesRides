@@ -1,8 +1,9 @@
 <div class="text-center">
   <!-- login form -->
 
-  <ngb-alert *ngIf="signedUp" type="success" (close)="signedUp = null">User signed up succefully. Login please!</ngb-alert>
-
+  <ngb-alert *ngIf="signedUp" type="success" (close)="signedUp = null">{{result}}</ngb-alert>
+  <ngb-alert *ngIf="didnotmatch" type="success" (close)="didnotmatch = null">{{result}}</ngb-alert>
+  <ngb-alert *ngIf="emailIdExists" type="success" (close)="emailIdExists = null">{{result}}</ngb-alert>
 
   <form *ngIf="loginshow" [formGroup]="loginForm" (ngSubmit)="login()" class="form-signin">
 
@@ -50,6 +51,14 @@
       <div class="invalid-feedback d-block" *ngIf="signupemailVal.errors.required">Email is required.</div>
       <div class="invalid-feedback d-block" *ngIf="signupemailVal.errors.email">Valid email address is required.</div>
     </div>
+
+    <label for="signupmobile" class="sr-only">Mobile Number</label>
+    <input maxlength="10" type="text" name="signupmobile" (keypress)="isInteger($event)" formControlName="signupmobile" class="form-control" placeholder="Mobile Number"
+      required>
+      <div *ngIf="signupmobileVal.invalid && (signupmobileVal.dirty || signupmobileVal.touched)">
+        <div class="invalid-feedback d-block" *ngIf="signupmobileVal.errors.required">Enter mobile number.</div>
+      </div>
+
     <!-- signup password -->
     <label for="signupPassword" class="sr-only">Password</label>
     <input type="password" formControlName="signupPassword" class="form-control" placeholder="Password" required>
@@ -69,12 +78,13 @@
 
           <!-- wallet -->
 
-    <label for="signupwallet" class="sr-only">Confirm Password</label>
-    <input type="text" name="signupwallet" formControlName="signupWallet" class="form-control" placeholder="Some Amount"
+    <label for="signupwallet" class="sr-only">Wallet</label>
+    <input (keypress)="isInteger($event)" maxlength="3" type="text" name="signupwallet" formControlName="signupWallet" class="form-control" placeholder="Some Amount"
       required>
       <div *ngIf="signupWalletVal.invalid && (signupWalletVal.dirty || signupWalletVal.touched)">
         <div class="invalid-feedback d-block" *ngIf="signupWalletVal.errors.required">Enter an amount for wallet.</div>
       </div>
+
     <button class="btn btn-lg btn-primary btn-block" [disabled]="signupForm.invalid" type="submit">Sign Up</button>
     <button type="button" class="btn btn-link" (click)="loginshow=true">Sign In</button>
     <p>

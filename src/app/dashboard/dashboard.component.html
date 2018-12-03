@@ -1,6 +1,6 @@
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="#">{{welcomeUser}}</a>
+      <div class="navbar-brand">{{welcomeUser}}</div>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -21,7 +21,7 @@
             <a class="nav-link" [routerLink]="['wallet']" href="#">Wallet</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Message</a>
+            <a class="nav-link" [routerLink]="['message']" href="#">Message</a>
           </li>
           <li class="nav-item dropdown">
               <a class="nav-link" [routerLink]="['mybookings']" href="#">My Booking</a>

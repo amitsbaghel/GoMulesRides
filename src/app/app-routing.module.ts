@@ -10,6 +10,7 @@ import { WalletComponent } from './wallet/wallet.component';
 import { MybookingComponent } from './mybooking/mybooking.component';
 import { MyridepostingComponent } from './myrideposting/myrideposting.component';
 import { ImageuploadComponent } from './imageupload/imageupload.component';
+import { MessageComponent } from './message/message.component';
 
 
 // https://codecraft.tv/courses/angular/routing/nested-routes/
@@ -20,7 +21,8 @@ const routes: Routes = [
     {path: '', component: RidesComponent},
     {path:'wallet',component: WalletComponent},
     {path:'mybookings',component: MybookingComponent},
-    {path:'myrideposting',component: MyridepostingComponent}
+    {path:'myrideposting',component: MyridepostingComponent},
+    {path:'message',component: MessageComponent}
   ],canActivate: [AuthGuard] },
   { path: '', component: LoginComponent },
   { path: '**', component: PageNotFoundComponent },

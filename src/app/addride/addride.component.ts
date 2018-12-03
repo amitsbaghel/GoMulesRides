@@ -20,41 +20,43 @@ export class AddrideComponent implements OnInit, AfterViewInit {
   @ViewChild('toCityauto') toCityauto: ElementRef;
   rideSaved: boolean = false
   priorDatesDisabled:any
-  todaydate:Date
+  // todaydate:Date
   ride:Ride
 
   constructor(private scriptloader: ScriptService, private rideService: RideService) {
-    this.todaydate=new Date();
-    this.todaydate.setHours(this.todaydate.getHours() + 2);
     this.ride = {
-      date: new Date().toLocaleDateString("en-US"),
-      from: "",
-      to: "",
-      seat: 0,
-      time: this.todaydate.getHours()+":01:00",
-      charge: ""
+      date: this.getTodaysDate(),from: "",to: "",seat: 0,time: this.getTime(),charge: ""
     }
    }
 
-  saveRide(): void {
+   // get current hour with desired formating.
+   getTime(){
+    var date=new Date();
+    date.setHours(date.getHours() + 2);
+    var hour=date.getHours()<10?('0'+date.getHours()):date.getHours()
+    var month=(date.getMonth()+1)<10?('0'+date.getMonth()):date.getMonth()
+    var dateVal=date.getDate()<10?('0'+date.getDate()):date.getDate()
+    return date.getFullYear()+"-"+month+"-"+dateVal+"T"+ hour+(":00:00")
+   }
 
+   // get today's date
+   getTodaysDate(){
+    var date=new Date();
+    var year=date.getFullYear()
+    var month=(date.getMonth()+1)<10?('0'+(date.getMonth()+1)):(date.getMonth()+1)
+    var datevar=date.getDate()<10?('0'+date.getDate()):date.getDate()
+    return month+"/"+datevar+"/"+year 
+   }
+
+  saveRide(): void {
     this.ride.from = this.fromCityauto.nativeElement.value;
     this.ride.to = this.toCityauto.nativeElement.value;
-    this.ride.time=  this.ride.time
     this.rideService.saveride(this.ride)
       .subscribe(ridedata => {
-
         if (ridedata) {
           this.rideSaved = true
-
           // reset the values
-          this.ride = {
-            date: new Date().toLocaleDateString("en-US"),
-            from: "",
-            to: "",
-            seat: 0,
-            time: this.todaydate.getHours()+":01:00",
-            charge: ""
+          this.ride = {date:this.getTodaysDate(),from: "",to: "",seat: 1,time: this.getTime(),charge: ""
           }
         }
         //here to code for save show.
@@ -71,7 +73,6 @@ export class AddrideComponent implements OnInit, AfterViewInit {
     this.scriptloader.load('googlemaps').then(data => {
 
       var fromcityAuto = new google.maps.places.Autocomplete(this.fromCityauto.nativeElement);
-
 
       // Set the data fields to return when the user selects a place.
       fromcityAuto.setComponentRestrictions(

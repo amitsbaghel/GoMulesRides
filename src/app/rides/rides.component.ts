@@ -22,6 +22,7 @@ export class RidesComponent implements OnInit, AfterViewInit {
   rideID: string //which is shown in modal popup
   wallet: string = ""
   booked: boolean = false
+  rideposterDetails:RidePosting[]
 
   @ViewChild('fromcity') fromCityauto: ElementRef;
   @ViewChild('tocity') toCityauto: ElementRef;
@@ -45,10 +46,25 @@ export class RidesComponent implements OnInit, AfterViewInit {
       }, err => {
         console.log('Something went wrong!');
       }
-      );  //saveRide ends
+      );  //get rides ends
 
     // get user data
   } //ngOnInit ends
+
+  //get ride poster details including comments, rating.
+  getRidePosterDetails(userid)
+  {
+    this.rideService.getRidePosterDetails(userid)
+    .subscribe(rideposterdetails => {
+      console.log('rideposterdetails',rideposterdetails)
+      if (rideposterdetails) {
+        this.rideposterDetails=rideposterdetails
+      }
+    }, err => {
+      console.log('Something went wrong!');
+    }
+    );  //get rides ends
+  }
 
   // get user data on the basis of user ID
   getUserData() {
@@ -65,7 +81,27 @@ export class RidesComponent implements OnInit, AfterViewInit {
   }
 
   //search starts
-  search(fromCity: string, toCity: string, ) {
+  search(fromCity: string, toCity: string) {
+
+        // getting all rides and fill
+        let searchkeyword={
+          from: fromCity?fromCity:undefined,
+          to:toCity?toCity:undefined
+        }
+
+    this.rideService.getridesSearch(searchkeyword)
+    .subscribe(ridedata => {
+      if (ridedata) {
+        console.log('ridedata',ridedata);
+        this.ridesDetails = ridedata
+      }
+    }, err => {
+      console.log('Something went wrong!');
+    }
+    );  //get rides ends
+
+    if(!fromCity && !toCity)
+    return false;
 
     var service = new google.maps.DistanceMatrixService();
     service.getDistanceMatrix(
@@ -83,10 +119,14 @@ export class RidesComponent implements OnInit, AfterViewInit {
       if (status !== google.maps.DistanceMatrixStatus.OK || status != "OK") {
         console.log('Error:', status);
       } else {
+        if(responseDis.originAddresses[0]=="" && responseDis.destinationAddresses[0]==""){
         this.distanceEle.nativeElement.value = responseDis.rows[0].elements[0].distance.text
         this.durationEle.nativeElement.value = responseDis.rows[0].elements[0].duration.text
+        }
       }
     }
+
+
   }//search ends
 
   // booking starts
@@ -130,6 +170,14 @@ export class RidesComponent implements OnInit, AfterViewInit {
 
     });
   } // modal pop up open ends
+
+    // modal pop up open starts
+    openRidePosterModal(content) {
+      this.modalService.open(content, {size:'lg', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      }, (reason) => {
+  
+      });
+    } // modal pop up open ends
 
   // getDismissReason starts
   private getDismissReason(reason: any): string {

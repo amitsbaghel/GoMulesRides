@@ -11,11 +11,18 @@ export class NgbTimeStringAdapter extends NgbTimeAdapter<string> {
     if (!value) {
       return null;
     }
-    const split = value.split(':');
-    return {
-      hour: parseInt(split[0], 10),
-      minute: parseInt(split[1], 10),
-      second: parseInt(split[2], 10)
+    // const split = value.split(':');
+    var date=new Date(value);
+    // return {
+    //   hour: parseInt(split[0], 10),
+    //   minute: parseInt(split[1], 10),
+    //   second: parseInt(split[2], 10)
+    // };
+
+     return {
+      hour: date.getHours(),
+      minute: date.getMinutes(),
+      second: date.getSeconds()
     };
   }
 
@@ -23,7 +30,9 @@ export class NgbTimeStringAdapter extends NgbTimeAdapter<string> {
     if (!time) {
       return null;
     }
-    return `${this.pad(time.hour)}:${this.pad(time.minute)}:${this.pad(time.second)}`;
+    var date=new Date();
+    var dateStr=date.getFullYear()+"-"+`${this.pad(date.getMonth()+1)}`+"-"+`${this.pad(date.getDate())}`+"T";
+    return dateStr +`${this.pad(time.hour)}:${this.pad(time.minute)}:${this.pad(time.second)}`;
   }
 
   private pad(i: number): string {

@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Ride,RidePosting } from '../_models/ride.model'
 import { catchError, tap } from 'rxjs/operators'
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { of } from 'rxjs'; // convert some data to observables
+import { BookingDetails } from '../_models/booking.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,26 +14,45 @@ export class RideService {
   constructor(private http: HttpClient) { }
 
   // get all rides
-  getrides(userdata: any): Observable<RidePosting[]> {
-    return this.http.get<RidePosting[]>(this.dataUrl, {}).pipe(
-      catchError(this.handleError('ride', userdata)));
+  getrides(searchdata: any): Observable<RidePosting[]> {
+
+    return this.http.get<RidePosting[]>(this.dataUrl).pipe(
+      catchError(this.handleError('ride', searchdata)));
+  }
+  
+  getridesSearch(searchdata: any): Observable<RidePosting[]> {
+
+    return this.http.get<RidePosting[]>(this.dataUrl+"/filter/rides/by/cities/"+searchdata.from+"/"+searchdata.to).pipe(
+      catchError(this.handleError('ride', searchdata)));
   }
 
-  // get  rides from a user
+   // get  rides details by userId with more details
+   getRidePosterDetails(userid: any): Observable<RidePosting[]> {
+    return this.http.get<RidePosting[]>(this.dataUrl +'/details/comments/' + userid, {}).pipe(
+      catchError(this.handleError('ridepost', {} as RidePosting[])));
+  }
+
+   // get rides by a ride Id
+   getridebyRideId(rideid: any): Observable<RidePosting[]> {
+    return this.http.get<RidePosting[]>(this.dataUrl + "/fetch/ride/by/id/" + rideid, {}).pipe(
+      catchError(this.handleError('ride', {} as RidePosting[])));
+  }
+
+  // get  rides by a user Id
   getridesbyuser(userid: any): Observable<RidePosting[]> {
     return this.http.get<RidePosting[]>(this.dataUrl + "/" + userid, {}).pipe(
       catchError(this.handleError('ride', {} as RidePosting[])));
   }
 
-  // update ride status
+  // update ride status to complete
   updateStatusRide(userid: any,rideid:string): Observable<RidePosting[]> {
     return this.http.get<RidePosting[]>(this.dataUrl + "/" + rideid+"/"+userid, {}).pipe(
       catchError(this.handleError('ride', {} as RidePosting[])));
   }
   
-  // update ride status
+  // cancel ride status
   canceltheRide(userid: any,rideid:string): Observable<RidePosting[]> {
-      return this.http.get<RidePosting[]>(this.dataUrl + "/cancel/" + rideid+"/"+userid, {}).pipe(
+      return this.http.get<RidePosting[]>(this.dataUrl + "/ride/cancel/" + rideid+"/"+userid, {}).pipe(
         catchError(this.handleError('ride', {} as RidePosting[])));
     }
 
