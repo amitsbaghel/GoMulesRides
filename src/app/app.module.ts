@@ -20,6 +20,7 @@ import { MybookingComponent } from './mybooking/mybooking.component';
 import { MyridepostingComponent } from './myrideposting/myrideposting.component';
 import { TimeBeforeValidatorDirective } from './shared/time-before.directive';
 import { ImageuploadComponent } from './imageupload/imageupload.component';
+import { NgbdModalContent } from './shared/modal.component';
 
 @NgModule({
   declarations: [
@@ -36,8 +37,10 @@ import { ImageuploadComponent } from './imageupload/imageupload.component';
     SumPipe,
     MybookingComponent,
     MyridepostingComponent,
-    ImageuploadComponent
+    ImageuploadComponent,
+    NgbdModalContent
   ],
+  entryComponents: [NgbdModalContent],
   imports: [
     BrowserModule,
     AppRoutingModule,

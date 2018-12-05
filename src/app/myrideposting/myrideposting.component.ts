@@ -4,6 +4,7 @@ import { Ride, RidePosting } from '../_models/ride.model';
 import { BookingDetails } from '../_models/booking.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BookingService } from '../_services/booking.service';
+import {NgbdModalContent} from '../shared/modal.component';
 
 @Component({
   selector: 'app-myrideposting',
@@ -51,12 +52,15 @@ export class MyridepostingComponent implements OnInit {
   //complete the ride starts
   completetheride(rideid:string,date:string,time:string)
   {
-    // var datetoCheck=this.combineDateTime(date,time);
-    // if(datetoCheck>=new Date())
-    // console.log(true);
-    // else
-    // console.log(false);
-
+    var datetoCheck:Date=this.combineDateTime(date,time);
+    // var anotherdate= new Date(datetoCheck);
+    // anotherdate.setHours(anotherdate.getHours()-1)
+    // console.log('anotherdate',anotherdate);
+    // console.log('datetoCheck',datetoCheck);
+        // if(datetoCheck<=anotherdate) // open it for dev
+    // if(1==1) //removed validation.
+     if(datetoCheck<=new Date()) // open it for prod
+{
     this.rideService.updateStatusRide(localStorage.getItem('currentUser'),rideid)
     .subscribe(rideData => {
       if (rideData) {
@@ -66,9 +70,15 @@ export class MyridepostingComponent implements OnInit {
       console.log('Something went wrong!');
     }
     );
+  }
+  else
+  {
+    const modal=this.modalService.open(NgbdModalContent);
+    modal.componentInstance.result = 'Ride is not yet complete';
+  }
   } //completetheride ends
 
-  combineDateTime(date:string,time:string)
+  combineDateTime(date:string,time:string):Date
   {
     var newDate=new Date(date);
     var newTime=new Date(time);

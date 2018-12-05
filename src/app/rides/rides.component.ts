@@ -92,7 +92,7 @@ export class RidesComponent implements OnInit, AfterViewInit {
     this.rideService.getridesSearch(searchkeyword)
     .subscribe(ridedata => {
       if (ridedata) {
-        console.log('ridedata',ridedata);
+        // console.log('ridedata',ridedata);
         this.ridesDetails = ridedata
       }
     }, err => {
