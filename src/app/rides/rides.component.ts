@@ -41,6 +41,7 @@ export class RidesComponent implements OnInit, AfterViewInit {
     this.rideService.getrides({})
       .subscribe(ridedata => {
         if (ridedata) {
+          
           this.ridesDetails = ridedata
         }
       }, err => {

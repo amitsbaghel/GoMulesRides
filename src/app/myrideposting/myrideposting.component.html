@@ -80,7 +80,7 @@
                         <td>{{booking.seat}}</td>
                         <td>{{booking.charge}}</td>
                         <td>{{booking.status}}</td>
-                        <th><button class="btn btn-primary btn-lg" type="button">Communicate</button></th>
+                        <th><button class="btn btn-primary btn-lg" (click)="navigateToMessage(booking.bookedByUserId)" type="button">Communicate</button></th>
                       </tr>
                     </tbody>
                   </table>

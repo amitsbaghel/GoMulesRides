@@ -5,6 +5,7 @@ import { BookingDetails } from '../_models/booking.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BookingService } from '../_services/booking.service';
 import {NgbdModalContent} from '../shared/modal.component';
+import {  Router } from '@angular/router';
 
 @Component({
   selector: 'app-myrideposting',
@@ -14,7 +15,10 @@ import {NgbdModalContent} from '../shared/modal.component';
 export class MyridepostingComponent implements OnInit {
   myridepostings:RidePosting[]
   ridebookingdetails: BookingDetails[]
-  constructor(private rideService:RideService,private bookingService:BookingService,private modalService: NgbModal) { }
+  constructor(private rideService:RideService,
+    private bookingService:BookingService,
+    private modalService: NgbModal,
+    private router:Router) { }
 
   ngOnInit() {
     this.rideService.getridesbyuser(localStorage.getItem('currentUser'))
@@ -39,6 +43,11 @@ export class MyridepostingComponent implements OnInit {
       console.log('Something went wrong!');
     }
     );
+  }
+
+  navigateToMessage(id:string){
+    this.router.navigate(['/dashboard/message', { id:id }]);
+    this.modalService.dismissAll()
   }
 
   // modal pop up open starts

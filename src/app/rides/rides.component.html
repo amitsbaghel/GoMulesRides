@@ -50,7 +50,7 @@
                   class="btn btn-link nav-link active">Book</button>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="#">Communicate</a>
+                <a class="nav-link active" [routerLink]="['../message',{id:ride._id.userid}]">Communicate</a> <!--,ride._id.userid-->
               </li>
               <li class="nav-item">
                   <button type="button" (click)="getRidePosterDetails(ride._id.userid);openRidePosterModal(ridedetails)"

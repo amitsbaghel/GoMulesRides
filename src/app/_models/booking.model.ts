@@ -13,4 +13,5 @@ export interface BookingDetails {
     charge:string;
     rideId:RidePosting;
     rating:number;
+    bookedByUserId?:string
 }

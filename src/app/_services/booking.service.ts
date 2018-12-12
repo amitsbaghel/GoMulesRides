@@ -56,6 +56,7 @@ export class BookingService {
 
    //get bookings by ride Id
    getbookingsbyRideId(rideid: any): Observable<BookingDetails[]> {
+     //console.log('this.dataUrl + "/ride/" + rideid',this.dataUrl + "/ride/" + rideid)
     return this.http.get<BookingDetails[]>(this.dataUrl + "/ride/" + rideid, {}).pipe(
       catchError(this.handleError('booking', {} as BookingDetails[])));
   }

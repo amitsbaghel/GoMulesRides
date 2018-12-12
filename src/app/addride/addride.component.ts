@@ -48,9 +48,34 @@ export class AddrideComponent implements OnInit, AfterViewInit {
     return month+"/"+datevar+"/"+year 
    }
 
+   combineDateTime(date:string,time:string):string
+   {
+     var newDate=new Date(date);
+     var newTime=new Date(time);
+     var year=newDate.getFullYear();
+     var month=newDate.getMonth()+1;
+     var day=newDate.getDate();
+     var hour=newTime.getHours();
+     var minute=newTime.getMinutes();
+    //  var combinedDate=new Date(year+"-"+this.pad(month)+"-"+this.pad(day)+"T"+this.pad(hour)+":"+this.pad(minute))
+    //  return combinedDate;
+     var combinedDate=year+"-"+this.pad(month)+"-"+this.pad(day)+"T"+this.pad(hour)+":"+this.pad(minute)+":00"
+     return combinedDate;
+   }
+
+   pad(value)
+   {
+     return value<10?'0'+value:value;
+   }
+
   saveRide(): void {
+    // debugger
     this.ride.from = this.fromCityauto.nativeElement.value;
     this.ride.to = this.toCityauto.nativeElement.value;
+
+    // save date with time instead of current time with it.
+    this.ride.time=this.combineDateTime(this.ride.date,this.ride.time);
+
     this.rideService.saveride(this.ride)
       .subscribe(ridedata => {
         if (ridedata) {

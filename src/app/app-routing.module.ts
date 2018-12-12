@@ -22,6 +22,7 @@ const routes: Routes = [
     {path:'wallet',component: WalletComponent},
     {path:'mybookings',component: MybookingComponent},
     {path:'myrideposting',component: MyridepostingComponent},
+    {path:'message/:id',component: MessageComponent},
     {path:'message',component: MessageComponent}
   ],canActivate: [AuthGuard] },
   { path: '', component: LoginComponent },

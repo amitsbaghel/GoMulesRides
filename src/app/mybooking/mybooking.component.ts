@@ -5,6 +5,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Ride, RidePosting } from '../_models/ride.model';
 import { RideService } from '../_services/ride.service';
+import {NgbdModalContent} from '../shared/modal.component';
+import {  Router } from '@angular/router';
 
 @Component({
   selector: 'app-mybooking',
@@ -18,7 +20,12 @@ bookingId:string;
 rateForm: FormGroup
 rideDetails:RidePosting[]
 
-  constructor(private bookingService: BookingService,private modalService: NgbModal,private fb: FormBuilder,private rideService:RideService) { }
+  constructor(private bookingService: BookingService,
+    private modalService: NgbModal,
+    private fb: FormBuilder,
+    private rideService:RideService,
+    private router:Router
+    ) { }
 
   ngOnInit() {
 
@@ -39,7 +46,22 @@ rideDetails:RidePosting[]
       });
   }
 
-  cancelBooking(bookingId){
+  // cancelBooking(bookingId){
+  //   this.bookingService.cancelBooking(localStorage.getItem('currentUser'),bookingId)
+  //   .subscribe(bookingData => {
+  //     if (bookingData) {
+  //       this.mybookings=bookingData
+  //     }
+  //   }, err => {
+  //     console.log('Something went wrong!');
+  //   }
+  //   );
+  // }
+
+  cancelBooking(bookingId,date:string,time:string){
+    var datetoCheck:Date=this.combineDateTime(date,time);
+    var date_24_less=new Date(datetoCheck.getTime()-(1000*60*60*24)) // minus 24 hours
+    if(new Date()<date_24_less){ //this condition to change.
     this.bookingService.cancelBooking(localStorage.getItem('currentUser'),bookingId)
     .subscribe(bookingData => {
       if (bookingData) {
@@ -49,6 +71,35 @@ rideDetails:RidePosting[]
       console.log('Something went wrong!');
     }
     );
+  }
+    else
+    {
+      const modal=this.modalService.open(NgbdModalContent);
+      modal.componentInstance.result = 'You can not cancel the ride if less than 24 hours are remaining';
+    }
+  }
+
+  combineDateTime(date:string,time:string):Date
+  {
+    var newDate=new Date(date);
+    var newTime=new Date(time);
+    var year=newDate.getFullYear();
+    var month=newDate.getMonth()+1;
+    var day=newDate.getDate();
+    var hour=newTime.getHours();
+    var minute=newTime.getMinutes();
+    var combinedDate=new Date(year+"-"+this.pad(month)+"-"+this.pad(day)+"T"+this.pad(hour)+":"+this.pad(minute))
+    return combinedDate;
+  }
+
+  pad(value)
+  {
+    return value<10?'0'+value:value;
+  }
+
+  navigateToMessage(id:string){
+    this.router.navigate(['/dashboard/message', { id:id }]);
+    this.modalService.dismissAll()
   }
 
 getRideDetails(rideId:string)

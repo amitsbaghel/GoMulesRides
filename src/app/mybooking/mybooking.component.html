@@ -41,7 +41,7 @@
               </div>
             </td>
             <td>{{booking.comment}}</td>
-            <td><button (click)="cancelBooking(booking._id)" [disabled]="booking.status=='complete' || booking.status=='cancelled' || booking.bookingStatus=='cancelled' " [ngStyle]="{'background-color': booking.status=='cancelled' || booking.status=='complete'?'grey':'' }" class="btn btn-primary btn-lg" type="button">{{booking.bookingStatus=='cancelled'?'Booking cancelled':booking.status=='cancelled'?"Ride cancelled":booking.status=='complete'?"completed":"Cancel"}}</button></td>
+            <td><button (click)="cancelBooking(booking._id,booking.date,booking.time)" [disabled]="booking.status=='complete' || booking.status=='cancelled' || booking.bookingStatus=='cancelled' " [ngStyle]="{'background-color': booking.status=='cancelled' || booking.status=='complete'?'grey':'' }" class="btn btn-primary btn-lg" type="button">{{booking.bookingStatus=='cancelled'?'Booking cancelled':booking.status=='cancelled'?"Ride cancelled":booking.status=='complete'?"completed":"Cancel"}}</button></td>
             <td><button class="btn btn-primary btn-lg" (click)="getRideDetails(booking.rideid); open(rideModal);" type="button">Details</button></td>
           </tr>
         </tbody>
@@ -113,7 +113,7 @@
                           <td>{{ride._id.createdDate | date:'MM/dd/yyyy'}}</td>
                           <td>{{ride._id.overallseats}}</td>
                           <td>{{ride._id.chargeperseat}}</td>
-                          <th><button class="btn btn-primary btn-lg" type="button">Communicate</button></th>
+                          <th><button (click)="navigateToMessage(ride._id.userid)" class="btn btn-primary btn-lg" type="button">Communicate</button></th>
                         </tr>
                       </tbody>
                     </table>
