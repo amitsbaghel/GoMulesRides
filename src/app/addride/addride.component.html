@@ -62,7 +62,6 @@
         </div>
 
         <div class="row">
-          <!-- seat -->
           <div class="col-md-6 mb-3">
             <label for="seat">Seats</label>
             <input type="text" (keypress)="isInteger($event)" [(ngModel)]="ride.seat" #rideseat="ngModel"  min="1" max="5" class="form-control" name="seat" id="seat" required>
@@ -70,8 +69,6 @@
               Seat is required.
             </div>
           </div>
-
-           <!-- charge -->
            <div class="col-md-6 mb-3">
             <label for="seat">Per person Charge in $</label>
             <input type="text" (keypress)="isInteger($event)" [(ngModel)]="ride.charge" #ridecharge="ngModel"  class="form-control" name="seat" id="seat" placeholder="" required>

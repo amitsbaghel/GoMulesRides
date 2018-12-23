@@ -11,14 +11,7 @@ export class NgbTimeStringAdapter extends NgbTimeAdapter<string> {
     if (!value) {
       return null;
     }
-    // const split = value.split(':');
     var date=new Date(value);
-    // return {
-    //   hour: parseInt(split[0], 10),
-    //   minute: parseInt(split[1], 10),
-    //   second: parseInt(split[2], 10)
-    // };
-
      return {
       hour: date.getHours(),
       minute: date.getMinutes(),

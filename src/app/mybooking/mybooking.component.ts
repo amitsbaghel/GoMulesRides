@@ -74,19 +74,6 @@ shownoshowUpRides()
   );
 }
 
-
-  // cancelBooking(bookingId){
-  //   this.bookingService.cancelBooking(localStorage.getItem('currentUser'),bookingId)
-  //   .subscribe(bookingData => {
-  //     if (bookingData) {
-  //       this.mybookings=bookingData
-  //     }
-  //   }, err => {
-  //     console.log('Something went wrong!');
-  //   }
-  //   );
-  // }
-
   cancelBooking(bookingId,date:string,time:string){
     var datetoCheck:Date=this.combineDateTime(date,time);
     var date_24_less=new Date(datetoCheck.getTime()-(1000*60*60*24)) // minus 24 hours

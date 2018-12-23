@@ -14,7 +14,6 @@ export class UploadService {
 
   // upload a file
   uploadfiles(fileuploads: FileList, itemname: string): Observable<any> {
-    // let formData=new FormData()
     const formData: FormData = new FormData();
     for (var i = 0; i < fileuploads.length; i++) {
       var file = fileuploads[i]

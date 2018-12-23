@@ -7,27 +7,15 @@
                     <div class="recent_heading">
                       <h4>Recent</h4>
                     </div>
-                    <!-- <div class="srch_bar">
-                      <div class="stylish-input-group">
-                        <input type="text" class="search-bar"  placeholder="Search" >
-                        <span class="input-group-addon">
-                        <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
-                        </span> </div>
-                    </div> -->
                   </div>
                   <div class="inbox_chat">
                     <div *ngFor="let msgUser of messageUser;let index = index">
-                      <!--  -->
                     <div [ngClass]="{'active_chat':msgUser.tobeopened}" class="chat_list">
                       <div class="chat_people">
                         <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
                         <div class="chat_ib">
-                            <!-- msgUser.sentById==sentFromId?msgUser.sentToId:msgUser.sentById -->
                             <h5><button type="button" (click)="sentToId=msgUser.sentById==sentFromId?msgUser.sentToId:msgUser.sentById;getUserMessages()" class="btn btn-link">{{msgUser.sentById==sentFromId?msgUser.sentToName:msgUser.sentByName}}</button>
-                          <!--  <span class="chat_date">Dec 25</span> -->
                           </h5>
-                          <!-- <p>Test, which is a new approach to have all solutions 
-                            astrology under one roof.</p> -->
                         </div>
                       </div>
                     </div>
@@ -35,7 +23,6 @@
                   </div>
                 </div>
                 <div  class="mesgs">
-                  <!-- <div *ngIf="msgUpdate" > -->
                   <div  class="msg_history" #scrollMessages>
                       <div *ngFor="let messagelist of messagelist;let index = index">
                     <div *ngIf="messagelist.sentToId==sentFromId" class="incoming_msg">

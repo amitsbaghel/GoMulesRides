@@ -1,6 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-// import { switchMap } from 'rxjs/operators';
 import { MessageUser, Message } from '../_models/message.model';
 import { MessageService } from '../_services/message.service';
 
@@ -34,13 +33,11 @@ export class MessageComponent implements OnInit {
   ngOnInit() {
       this.sentToId=this.route.snapshot.paramMap.has('id')? this.route.snapshot.paramMap.get('id'):null;
       this.messageService.getAllChatUserDetails(this.sentFromId,this.sentToId).subscribe(messageusers => {
-        // debugger
+
         if (messageusers.length>0) {
           if(this.sentToId) // if redireted from somewhere.
           {
             // change user div to active div.
-          //  var msgUser:MessageUser=messageusers.find(value=>value.sentToId==this.sentToId)
-          //   msgUser.tobeopened=true
             this.messageUser=messageusers;
             this.getUserMessages()
           }
@@ -54,7 +51,6 @@ export class MessageComponent implements OnInit {
                 this.messageUser=messageusers;
                 this.getUserMessages();
               }
-              // this.messageUser=messageusers;
       }}, err => {
         console.log('Something went wrong!');
       }
