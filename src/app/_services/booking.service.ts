@@ -54,12 +54,27 @@ export class BookingService {
           catchError(this.handleError('ride', {} as BookingDetails[])));
     }
 
+    // mark the booking no show up
+    markBookingNoShowUp(bookingid:string,rideid:string): Observable<BookingDetails[]> {
+      // update path here
+      console.log(this.dataUrl + "/no/show/up/bybooker/" + rideid+"/"+bookingid);
+      return this.http.get<BookingDetails[]>(this.dataUrl + "/no/show/up/bybooker/" + rideid+"/"+bookingid, {}).pipe(
+        catchError(this.handleError('booking details', {} as BookingDetails[])));
+    }
+
    //get bookings by ride Id
    getbookingsbyRideId(rideid: any): Observable<BookingDetails[]> {
      //console.log('this.dataUrl + "/ride/" + rideid',this.dataUrl + "/ride/" + rideid)
     return this.http.get<BookingDetails[]>(this.dataUrl + "/ride/" + rideid, {}).pipe(
       catchError(this.handleError('booking', {} as BookingDetails[])));
   }
+
+  //get bookings by ride Id without cancelled rides
+  getbookingsbyRideIdNotCancelled(rideid: any): Observable<BookingDetails[]> {
+    console.log(this.dataUrl + "/ride/not/cancelled/complete/" + rideid);
+   return this.http.get<BookingDetails[]>(this.dataUrl + "/ride/not/cancelled/complete/" + rideid, {}).pipe(
+     catchError(this.handleError('booking', {} as BookingDetails[])));
+ }
 
   /**
  * Handle Http operation that failed.

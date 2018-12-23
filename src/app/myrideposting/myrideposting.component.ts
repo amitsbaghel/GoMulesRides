@@ -15,6 +15,13 @@ import {  Router } from '@angular/router';
 export class MyridepostingComponent implements OnInit {
   myridepostings:RidePosting[]
   ridebookingdetails: BookingDetails[]
+  ridebookingdetailscomp: BookingDetails[]
+  rideID:string
+  rideDate:string
+  rideTime:string
+  rideCompleted:boolean
+  markedNoShowUp:boolean
+
   constructor(private rideService:RideService,
     private bookingService:BookingService,
     private modalService: NgbModal,
@@ -59,21 +66,17 @@ export class MyridepostingComponent implements OnInit {
   } // modal pop up open ends
 
   //complete the ride starts
-  completetheride(rideid:string,date:string,time:string)
+  completetheride() //rideid:string,date:string,time:string
   {
-    var datetoCheck:Date=this.combineDateTime(date,time);
-    // var anotherdate= new Date(datetoCheck);
-    // anotherdate.setHours(anotherdate.getHours()-1)
-    // console.log('anotherdate',anotherdate);
-    // console.log('datetoCheck',datetoCheck);
-        // if(datetoCheck<=anotherdate) // open it for dev
-    // if(1==1) //removed validation.
+    var datetoCheck:Date=this.combineDateTime(this.rideDate,this.rideTime); //date,time
      if(datetoCheck<=new Date()) // open it for prod
 {
-    this.rideService.updateStatusRide(localStorage.getItem('currentUser'),rideid)
+    this.rideService.updateStatusRide(localStorage.getItem('currentUser'),this.rideID) //rideid
     .subscribe(rideData => {
       if (rideData) {
         this.myridepostings=rideData
+        // here a popup message to show ride successfully market completed.
+        this.rideCompleted=true
       }
     }, err => {
       console.log('Something went wrong!');
@@ -86,6 +89,48 @@ export class MyridepostingComponent implements OnInit {
     modal.componentInstance.result = 'Ride is not yet complete';
   }
   } //completetheride ends
+
+  getBookingsByRideIdcomplete(rideid:string,date:string,time:string)
+  {
+    this.rideID=rideid;
+    this.rideDate=date;
+    this.rideTime=time;
+    this.rideCompleted=false
+    this.markedNoShowUp=false
+
+    this.bookingService.getbookingsbyRideIdNotCancelled(rideid)
+    .subscribe(ridebookingdetails => {
+      if (ridebookingdetails) {
+        console.log(ridebookingdetails)
+        this.ridebookingdetailscomp=ridebookingdetails
+      }
+    }, err => {
+      console.log('Something went wrong!');
+    }
+    );
+  }
+
+  markBookingNoShowUp(bookingID:string){
+    // debugger
+    var datetoCheck:Date=this.combineDateTime(this.rideDate,this.rideTime); //date,time
+    if(datetoCheck<=new Date()) {
+
+    this.bookingService.markBookingNoShowUp(bookingID,this.rideID)
+    .subscribe(bookingData => {
+      if (bookingData) {
+        this.ridebookingdetailscomp=bookingData;
+        
+      }
+    }, err => {
+      console.log('Something went wrong!');
+    }
+    );
+  }
+  else{
+    const modal=this.modalService.open(NgbdModalContent);
+    modal.componentInstance.result = 'Ride is not yet complete';
+  }
+  }
 
   combineDateTime(date:string,time:string):Date
   {

@@ -19,6 +19,7 @@ rated:boolean;
 bookingId:string;
 rateForm: FormGroup
 rideDetails:RidePosting[]
+tempbookingDetails:BookingDetails[]
 
   constructor(private bookingService: BookingService,
     private modalService: NgbModal,
@@ -45,6 +46,34 @@ rideDetails:RidePosting[]
         comment: ['']
       });
   }
+
+showAllRides()
+{
+  this.bookingService.getrides(localStorage.getItem('currentUser'))
+  .subscribe(bookingData => {
+    if (bookingData) {
+      console.log('bookingdata',bookingData)
+      this.mybookings=bookingData
+    }
+  }, err => {
+    console.log('Something went wrong!');
+  }
+  );
+}
+
+shownoshowUpRides()
+{
+  this.bookingService.getrides(localStorage.getItem('currentUser'))
+  .subscribe(bookingData => {
+    if (bookingData) {
+      this.mybookings=bookingData.filter(value =>value.bookingStatus=='noshowup');
+    }
+  }, err => {
+    console.log('Something went wrong!');
+  }
+  );
+}
+
 
   // cancelBooking(bookingId){
   //   this.bookingService.cancelBooking(localStorage.getItem('currentUser'),bookingId)

@@ -35,7 +35,8 @@
               <td>{{posting.totalbookingseats}}</td>
               <td>{{posting.totalbookingcharge}}</td>
               <td><button class="btn btn-primary btn-lg" [ngStyle]="{'background-color': posting._id.status=='cancelled'?'grey':'' }" [disabled]="posting._id.status=='complete' || posting._id.status=='cancelled' " (click)="canceltheride(posting._id._id)" type="button">{{posting._id.status=='cancelled'?"cancelled":"Cancel"}}</button></td>
-              <td><button class="btn btn-primary btn-lg" [ngStyle]="{'background-color': posting._id.status=='complete'?'grey':'' }" [disabled]="posting._id.status=='complete' || posting._id.status=='cancelled'" (click)="completetheride(posting._id._id,posting._id.date,posting._id.time)" type="button">{{posting._id.status=='complete'?"Completed":"Complete"}}</button></td>
+              <!-- <td><button class="btn btn-primary btn-lg" [ngStyle]="{'background-color': posting._id.status=='complete'?'grey':'' }" [disabled]="posting._id.status=='complete' || posting._id.status=='cancelled'" (click)="completetheride(posting._id._id,posting._id.date,posting._id.time)" type="button">{{posting._id.status=='complete'?"Completed":"Complete"}}</button></td> -->
+              <td><button class="btn btn-primary btn-lg" [ngStyle]="{'background-color': posting._id.status=='complete'?'grey':'' }" [disabled]="posting._id.status=='complete' || posting._id.status=='cancelled'" (click)="getBookingsByRideIdcomplete(posting._id._id,posting._id.date,posting._id.time);open(completeride)" type="button">{{posting._id.status=='complete'?"Completed":"Complete"}}</button></td>
               <td><button class="btn btn-primary btn-lg" (click)="getBookingsByRideId(posting._id._id);open(booking);" type="button">Details</button></td>
               <td></td>
             </tr>
@@ -92,5 +93,58 @@
             </div>
         </ng-template>
       <!--modal ends-->
+
+        <!--complete modal starts-->
+        <ng-template #completeride let-modal>
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Complete the ride</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+            <div class="modal-body">
+                <ngb-alert *ngIf="markedNoShowUp" type="success" (close)="markedNoShowUp = null">Marked no show up succefully!</ngb-alert>
+                <ngb-alert *ngIf="rideCompleted" type="success" (close)="rideCompleted = null">Ride marked complete succefully!</ngb-alert>
+              <div  *ngFor="let booking of ridebookingdetailscomp;let index = index">
+                Rides
+              <div class="table-responsive">
+                  <table class="table table-striped table-sm">
+                    <thead>
+                      <tr>
+                          <th>#</th>
+                          <th>booked By</th>
+                          <th>Email</th>
+                          <th>booked On</th>
+                          <th>seat</th>
+                          <th>charge</th>
+                          <th>Status</th>
+                          <th>Mark No ShowUp</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr  [attr.data-index]="index"> 
+                        <td>{{index+1}}</td>
+                        <td>{{booking.bookedByname}}</td>
+                        <td>{{booking.bookedByemail}}</td>
+                        <td>{{booking.bookedOn | date:'MM/dd/yyyy'}}</td>
+                        <td>{{booking.seat}}</td>
+                        <td>{{booking.charge}}</td>
+                        <td>{{booking.status}}</td>
+                        <th>
+
+                          <button [disabled]="booking.status=='noshowup'"  class="btn btn-primary btn-lg" (click)="markBookingNoShowUp(booking._id)" type="button">No Show Up</button>
+                        </th>
+                      </tr>
+                    </tbody>
+                  </table>
+                  </div> <!--table responsive ends-->
+                </div>
+            </div>
+            <div class="modal-footer">
+              <!-- <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">close</button> -->
+              <button type="button" class="btn btn-outline-dark" (click)="completetheride()">Complete the ride</button>
+            </div>
+        </ng-template>
+      <!--complete modal ends-->
 
     </main>

@@ -1,5 +1,8 @@
 <main role="main" class="container w-100">
+    <button (click)="shownoshowUpRides();" class="btn btn-primary" type="button">No ShowUp rides</button>
+    <button (click)="showAllRides();" class="btn btn-primary" type="button">All rides</button>
   <div class="jumbotron">
+
       <div class="card">
           <div class="card-header">
             My Bookings
@@ -37,11 +40,11 @@
               <ngb-rating [readonly]="true" max="5" [(rate)]="booking.rating"></ngb-rating>
             </div>
             <div *ngIf="booking.rating==0">
-                <button [disabled]="booking.status=='incomplete' || booking.status=='cancelled' " (click)="bookingId=booking._id;open(content)"  class="btn btn-primary btn-lg" type="button">Rate</button>
+                <button [disabled]="booking.status=='incomplete' || booking.status=='cancelled' || booking.bookingStatus=='cancelled' || booking.bookingStatus=='noshowup'" (click)="bookingId=booking._id;open(content)"  class="btn btn-primary btn-lg" type="button">Rate</button>
               </div>
             </td>
             <td>{{booking.comment}}</td>
-            <td><button (click)="cancelBooking(booking._id,booking.date,booking.time)" [disabled]="booking.status=='complete' || booking.status=='cancelled' || booking.bookingStatus=='cancelled' " [ngStyle]="{'background-color': booking.status=='cancelled' || booking.status=='complete'?'grey':'' }" class="btn btn-primary btn-lg" type="button">{{booking.bookingStatus=='cancelled'?'Booking cancelled':booking.status=='cancelled'?"Ride cancelled":booking.status=='complete'?"completed":"Cancel"}}</button></td>
+            <td><button (click)="cancelBooking(booking._id,booking.date,booking.time)" [disabled]="booking.status=='complete' || booking.status=='cancelled' || booking.bookingStatus=='cancelled' || booking.bookingStatus=='noshowup' " [ngStyle]="{'background-color': booking.status=='cancelled' || booking.status=='complete'?'grey':'' }" class="btn btn-primary btn-lg" type="button">{{booking.bookingStatus=='noshowup'?'No ShowUp':booking.bookingStatus=='cancelled'?'Booking cancelled':booking.status=='cancelled'?"Ride cancelled":booking.status=='complete'?"completed":"Cancel"}}</button></td>
             <td><button class="btn btn-primary btn-lg" (click)="getRideDetails(booking.rideid); open(rideModal);" type="button">Details</button></td>
           </tr>
         </tbody>

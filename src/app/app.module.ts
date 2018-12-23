@@ -38,7 +38,7 @@ import { NgbdModalContent } from './shared/modal.component';
     MybookingComponent,
     MyridepostingComponent,
     ImageuploadComponent,
-    NgbdModalContent
+    NgbdModalContent,
   ],
   entryComponents: [NgbdModalContent],
   imports: [
